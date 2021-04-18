@@ -7,6 +7,7 @@ class HomePage extends StatelessWidget {
   HomePage({@required this.presenter});
   @override
   Widget build(BuildContext context) {
+    presenter.loadData();
     return Scaffold(
         appBar: AppBar(
       title: StreamBuilder<AccountEntity>(

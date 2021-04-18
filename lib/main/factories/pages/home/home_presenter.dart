@@ -4,4 +4,5 @@ abstract class HomePresenter {
   Stream<int> get menuSelected;
   Stream<AccountEntity> get account;
   void changeMenuSelected(int value);
+  void loadData();
 }

@@ -6,6 +6,10 @@ class GetxHomePresenter extends GetxController implements HomePresenter {
   final _menuSelected = RxInt(0);
   final _account = Rx<AccountEntity>(null);
   Stream<int> get menuSelected => _menuSelected.stream;
+  void loadData() {
+    _account.value = Get.arguments;
+  }
+
   Stream<AccountEntity> get account => _account.stream;
   void changeMenuSelected(int value) {
     _menuSelected.value = value;
