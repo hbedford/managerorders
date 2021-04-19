@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:managerorders/data/models/account_model.dart';
 import 'package:managerorders/data/usecases/account_firebase.dart';
 import 'package:managerorders/domain/entities/account_entity.dart';
 import 'package:managerorders/data/factories/pages/login/login_presenter.dart';
@@ -17,12 +16,6 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         firebaseAuth: FirebaseAuth.instance, googleSignIn: GoogleSignIn());
     User user = await loginWithGoogle.signIn();
     if (user != null) {
-      AccountEntity account;
-      account = AccountModel(
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          companyName: null);
       AccountFirebase accountFirebase =
           AccountFirebase(firebase: FirebaseFirestore.instance);
       AccountEntity accountInfo = await accountFirebase.getAccountData(user);
