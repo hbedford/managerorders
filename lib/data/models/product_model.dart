@@ -1,8 +1,5 @@
-import 'package:managerorders/domain/entities/ingredient_entity.dart';
 import 'package:managerorders/domain/entities/product_entity.dart';
 import 'package:meta/meta.dart';
-
-import 'ingredient_model.dart';
 
 class ProductModel extends ProductEntity {
   ProductModel(
