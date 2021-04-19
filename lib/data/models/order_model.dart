@@ -8,10 +8,12 @@ class OrderModel extends OrderEntity {
     @required String name,
     @required String client,
     @required String description,
+    @required DateTime date,
     @required List<ProductEntity> products,
   }) : super(
             uid: uid,
             client: client,
+            date: date,
             description: description,
             products: products);
 }
