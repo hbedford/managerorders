@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:managerorders/domain/entities/account_entity.dart';
-import 'package:managerorders/main/factories/pages/home/home_presenter.dart';
+import 'package:managerorders/data/factories/pages/home/home_presenter.dart';
 
 class GetxHomePresenter extends GetxController implements HomePresenter {
   final _menuSelected = RxInt(0);

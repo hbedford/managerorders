@@ -30,10 +30,13 @@ class LoginWithGoogle extends GoogleSignInAuth {
       final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: authentication.accessToken,
           idToken: authentication.idToken);
-      await firebaseAuth.signInWithCredential(credential);
+      await firebaseAuth
+          .signInWithCredential(credential)
+          .catchError((error) => print(error));
       final User user = firebaseAuth.currentUser;
       return user;
     } catch (e) {
+      print(e);
       return null;
     }
   }
