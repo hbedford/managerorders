@@ -7,36 +7,101 @@ import 'components/orders_in_progress_widgets.dart';
 class HomePage extends StatelessWidget {
   final HomePresenter presenter;
   HomePage({@required this.presenter});
+
   @override
   Widget build(BuildContext context) {
-    presenter.loadData();
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder<AccountEntity>(
-          stream: presenter.account,
-          builder: (context, account) =>
-              account.hasData ? Text(account.data.name) : Container(),
+        title: ValueListenableBuilder<AccountEntity>(
+          valueListenable: presenter.account,
+          builder: (_, value, child) => Text(value.name),
         ),
       ),
-      body: LayoutBuilder(
-        builder: (_, constraint) => Column(
-          children: [
-            Container(
-              height: constraint.maxHeight * 0.1,
-              child: Row(
-                children: [
-                  Flexible(
-                      child: Container(
-                          color: Colors.white,
-                          child: Center(child: Text('Pedidos em andamento')))),
-                  Flexible(
-                      child: Container(
-                          color: Colors.grey,
-                          child: Center(child: Text('Pedidos finalizados'))))
-                ],
+      body: Builder(builder: (context) {
+        presenter.loadData();
+        return SafeArea(
+          child: Row(
+            children: [
+              RailNavigator(
+                presenter: presenter,
               ),
+              VerticalDivider(thickness: 1, width: 1),
+              Expanded(
+                flex: 8,
+                child: LayoutBuilder(
+                  builder: (_, constraint) => Column(
+                    children: [
+                      Container(
+                          height: constraint.maxHeight * 0.1,
+                          child: ValueListenableBuilder(
+                            valueListenable: presenter.menuSelected,
+                            builder: (_, value, child) => Row(
+                              children: [
+                                Flexible(
+                                    child: InkWell(
+                                  onTap: () => presenter.changeMenuSelected(0),
+                                  child: Container(
+                                      color: value == 0
+                                          ? Colors.white
+                                          : Colors.grey,
+                                      child: Center(
+                                          child: Text('Pedidos em andamento'))),
+                                )),
+                                Flexible(
+                                    child: InkWell(
+                                  onTap: () => presenter.changeMenuSelected(1),
+                                  child: Container(
+                                      color: value == 1
+                                          ? Colors.white
+                                          : Colors.grey,
+                                      child: Center(
+                                          child: Text('Pedidos finalizados'))),
+                                ))
+                              ],
+                            ),
+                          )),
+                      Expanded(
+                          child: ValueListenableBuilder(
+                        valueListenable: presenter.orders,
+                        builder: (_, value, child) => OrdersInProgressWidgets(
+                          orders: value,
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class RailNavigator extends StatelessWidget {
+  final HomePresenter presenter;
+  RailNavigator({@required this.presenter});
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: ValueListenableBuilder(
+        valueListenable: presenter.menuLeftSelected,
+        builder: (_, value, child) => NavigationRail(
+          selectedIndex: value,
+          onDestinationSelected: presenter.changeMenuLeftSelected,
+          labelType: NavigationRailLabelType.selected,
+          destinations: [
+            NavigationRailDestination(
+              icon: Icon(Icons.pending_actions),
+              selectedIcon: Icon(Icons.pending_actions),
+              label: Text('Pedidos'),
             ),
-            Expanded(child: OrdersInProgressWidgets())
+            NavigationRailDestination(
+              icon: Icon(Icons.bookmark),
+              selectedIcon: Icon(Icons.bookmark),
+              label: Text('Produtos'),
+            ),
           ],
         ),
       ),
