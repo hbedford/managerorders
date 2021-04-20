@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:managerorders/domain/entities/account_entity.dart';
 import 'package:managerorders/data/factories/pages/home/home_presenter.dart';
 
-import 'components/orders_in_progress_widgets.dart';
+import 'components/orders_widget.dart';
+import 'components/products_widget.dart';
 
 class HomePage extends StatelessWidget {
   final HomePresenter presenter;
@@ -27,50 +28,20 @@ class HomePage extends StatelessWidget {
               ),
               VerticalDivider(thickness: 1, width: 1),
               Expanded(
-                flex: 8,
-                child: LayoutBuilder(
-                  builder: (_, constraint) => Column(
-                    children: [
-                      Container(
-                          height: constraint.maxHeight * 0.1,
-                          child: ValueListenableBuilder(
-                            valueListenable: presenter.menuSelected,
-                            builder: (_, value, child) => Row(
-                              children: [
-                                Flexible(
-                                    child: InkWell(
-                                  onTap: () => presenter.changeMenuSelected(0),
-                                  child: Container(
-                                      color: value == 0
-                                          ? Colors.white
-                                          : Colors.grey,
-                                      child: Center(
-                                          child: Text('Pedidos em andamento'))),
-                                )),
-                                Flexible(
-                                    child: InkWell(
-                                  onTap: () => presenter.changeMenuSelected(1),
-                                  child: Container(
-                                      color: value == 1
-                                          ? Colors.white
-                                          : Colors.grey,
-                                      child: Center(
-                                          child: Text('Pedidos finalizados'))),
-                                ))
-                              ],
-                            ),
-                          )),
-                      Expanded(
-                          child: ValueListenableBuilder(
-                        valueListenable: presenter.orders,
-                        builder: (_, value, child) => OrdersInProgressWidgets(
-                          orders: value,
-                        ),
-                      ))
-                    ],
-                  ),
-                ),
-              ),
+                  flex: 8,
+                  child: ValueListenableBuilder(
+                    valueListenable: presenter.menuLeftSelected,
+                    builder: (_, value, child) {
+                      if (value == 0)
+                        return OrdersWidget(
+                          presenter: presenter,
+                        );
+                      else
+                        return ProductsWidget(
+                          presenter: presenter,
+                        );
+                    },
+                  )),
             ],
           ),
         );
